@@ -16,7 +16,7 @@ const ITEMS: Item[] = [
   { label: "Quotas",        href: "/quotas",         icon: Gauge },
   { label: "My Profile",    href: "/profile",        icon: User },
   { label: "Help",          href: "/help",           icon: HelpCircle },
-  { label: "Login/Logout",  href: "/auth",           icon: LogIn },
+  { label: "Logout",  href: "/auth",           icon: LogIn },
 ];
 
 function cx(...classes: (string | false | undefined)[]) {
