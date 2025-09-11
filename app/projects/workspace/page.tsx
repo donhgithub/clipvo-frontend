@@ -2,6 +2,13 @@
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../../../components/ui/tabs";
 
+import dynamic from "next/dynamic";
+const AddTextVoice = dynamic(() => import("../../../components/workspace/AddTextVoice"));
+const WordsToLife = dynamic(() => import("../../../components/workspace/WordsToLife"));
+const Sounds = dynamic(() => import("../../../components/workspace/Sounds"));
+const IntroExit = dynamic(() => import("../../../components/workspace/IntroExit"));
+const ExportTab = dynamic(() => import("../../../components/workspace/ExportTab"));
+
 export default function WorkspacePage() {
   return (
     <Tabs defaultValue="addtextvoice" className="w-full">
@@ -14,21 +21,11 @@ export default function WorkspacePage() {
       </TabsList>
 
       <div className="mt-4">
-        <TabsContent value="addtextvoice">
-          <div className="rounded-lg border p-4">Add Text / Voice — placeholder content</div>
-        </TabsContent>
-        <TabsContent value="words">
-          <div className="rounded-lg border p-4">Words to Life — placeholder content</div>
-        </TabsContent>
-        <TabsContent value="sounds">
-          <div className="rounded-lg border p-4">Sounds — placeholder content</div>
-        </TabsContent>
-        <TabsContent value="introexit">
-          <div className="rounded-lg border p-4">Intro/Exit — placeholder content</div>
-        </TabsContent>
-        <TabsContent value="export">
-          <div className="rounded-lg border p-4">Export — placeholder content</div>
-        </TabsContent>
+        <TabsContent value="addtextvoice"><AddTextVoice /></TabsContent>
+        <TabsContent value="words"><WordsToLife /></TabsContent>
+        <TabsContent value="sounds"><Sounds /></TabsContent>
+        <TabsContent value="introexit"><IntroExit /></TabsContent>
+        <TabsContent value="export"><ExportTab /></TabsContent>
       </div>
     </Tabs>
   );

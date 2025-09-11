@@ -3,19 +3,13 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 
-// ✅ our custom layout components
 import AppSidebar from "../components/layout/AppSidebar";
-import AppHeader from "../components/layout/AppHeader";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+// 👇 from shadcn sidebar
+import { SidebarProvider, SidebarInset, SidebarTrigger } from "../components/ui/sidebar";
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
+const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Clipvo",
@@ -24,23 +18,25 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <div className="min-h-screen flex">
+        {/* ✅ Wrap everything in SidebarProvider */}
+        <SidebarProvider>
           {/* Left sidebar */}
           <AppSidebar />
 
-          {/* Right side: header + page content */}
-          <div className="flex-1 flex flex-col">
-            <main className="flex-1 p-6">{children}</main>
-          </div>
-        </div>
+          {/* Right side (content area). SidebarInset is the shadcn wrapper that accounts for the sidebar width */}
+          <SidebarInset className="min-h-screen flex flex-col">
+            {/* Mobile hamburger trigger */}
+            <div className="p-2 lg:hidden">
+              <SidebarTrigger />
+            </div>
 
-        {/* Toast notifications */}
+            <main className="flex-1 p-6">{children}</main>
+          </SidebarInset>
+        </SidebarProvider>
         <Toaster />
       </body>
     </html>
