@@ -1,15 +1,8 @@
-"use client";
-
-import { Button } from "../components/ui/button";
-import { toast } from "sonner";
-
-export default function Home() {
+export default function Page() {
   return (
-    <main className="p-6">
-      <h1 className="text-3xl font-bold mb-4">Home</h1>
-      <Button onClick={() => toast("Hello from Sonner!")}>
-        Click me
-      </Button>
-    </main>
+    <div>
+      <h1 className="text-2xl font-bold">Test Page</h1>
+      <p>This is just a test page so I can see the sidebar and header working.</p>
+    </div>
   );
 }
