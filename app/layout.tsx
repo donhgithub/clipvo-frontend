@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
+import MobileSidebarToggle from "../components/layout/MobileSidebarToggle";
 
 import AppSidebar from "../components/layout/AppSidebar";
 
@@ -31,7 +32,7 @@ export default function RootLayout({
           <SidebarInset className="min-h-screen flex flex-col">
             {/* Mobile hamburger trigger */}
             <div className="p-2 lg:hidden">
-              <SidebarTrigger />
+              <MobileSidebarToggle />
             </div>
 
             <main className="flex-1 p-6">{children}</main>
