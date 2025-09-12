@@ -2,12 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
-import MobileSidebarToggle from "../components/layout/MobileSidebarToggle";
-
-import AppSidebar from "../components/layout/AppSidebar";
-
-// 👇 from shadcn sidebar
-import { SidebarProvider, SidebarInset} from "../components/ui/sidebar";
+import AuthButton from "@/components/AuthButton";
+import { getAuth } from "@/lib/auth";  // server helper
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -25,27 +21,28 @@ export const viewport: Viewport = {
   themeColor: "#111827",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const { isSignedIn } = await getAuth(); // ✅ dynamic Sign in/Sign out
+
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {/* ✅ Wrap everything in SidebarProvider */}
-        <SidebarProvider>
-          {/* Left sidebar */}
-          <AppSidebar />
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen`}>
+        <header className="border-b px-6 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <a href="/" className="font-semibold">Clipvo</a>
+            <nav className="flex gap-4 text-sm">
+              <a href="/" className="underline">Home</a>
+              <a href="/about" className="underline">About</a>
+              <a href="/contact" className="underline">Contact</a>
+              <a href="/tos" className="underline">TOS</a>
+            </nav>
+          </div>
+          <AuthButton isSignedIn={isSignedIn} />
+        </header>
 
-          {/* Right side (content area). SidebarInset is the shadcn wrapper that accounts for the sidebar width */}
-          <SidebarInset className="min-h-screen flex flex-col">
-            {/* Mobile hamburger trigger */}
-            <div className="p-2 lg:hidden">
-              <MobileSidebarToggle />
-            </div>
-
-            <main className="flex-1 p-6">{children}</main>
-          </SidebarInset>
-        </SidebarProvider>
+        <main className="p-6">{children}</main>
         <Toaster />
       </body>
     </html>

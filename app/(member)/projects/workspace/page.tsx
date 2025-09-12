@@ -1,13 +1,13 @@
 "use client";
 
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "../../../components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "../../../../components/ui/tabs";
 
 import dynamic from "next/dynamic";
-const AddTextVoice = dynamic(() => import("../../../components/workspace/AddTextVoice"));
-const WordsToLife = dynamic(() => import("../../../components/workspace/WordsToLife"));
-const Sounds = dynamic(() => import("../../../components/workspace/Sounds"));
-const IntroExit = dynamic(() => import("../../../components/workspace/IntroExit"));
-const ExportTab = dynamic(() => import("../../../components/workspace/ExportTab"));
+const AddTextVoice = dynamic(() => import("../../../../components/workspace/AddTextVoice"));
+const WordsToLife = dynamic(() => import("../../../../components/workspace/WordsToLife"));
+const Sounds = dynamic(() => import("../../../../components/workspace/Sounds"));
+const IntroExit = dynamic(() => import("../../../../components/workspace/IntroExit"));
+const ExportTab = dynamic(() => import("../../../../components/workspace/ExportTab"));
 
 export default function WorkspacePage() {
   return (

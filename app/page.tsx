@@ -1,16 +1,37 @@
-// app/page.tsx  (Server Component)
-const appName = process.env.NEXT_PUBLIC_SITE_NAME;
+// app/page.tsx (server component)
+import Link from "next/link";
+import { getAuth } from "@/lib/auth";
 
-export default function Page() {
+export default async function Home() {
+  const { isSignedIn } = await getAuth();
+
   return (
-    <main className="p-6">
-      <h1 className="text-2xl font-bold">Test Page</h1>
-      <p className="mt-2">
-        App name from env: <strong>{appName}</strong>
+    <main className="p-6 space-y-4">
+      <h1 className="text-2xl font-semibold">Home Page</h1>
+
+      {/* (Optional) keep your env note or remove this block */}
+      <p>
+        App name from env: <strong>{process.env.NEXT_PUBLIC_APP_NAME ?? "Clipvo"}</strong>
       </p>
-      <p className="mt-1 text-sm text-gray-500">
-        (This proves env works in a Server Component.)
-      </p>
+      <p className="text-muted-foreground">(This proves env works in a Server Component.)</p>
+
+      <div className="pt-4">
+        {isSignedIn ? (
+          <Link
+            href="/projects"
+            className="inline-block px-4 py-2 rounded-xl border hover:bg-muted"
+          >
+            Dashboard
+          </Link>
+        ) : (
+          <Link
+            href="/signin"
+            className="inline-block px-4 py-2 rounded-xl border hover:bg-muted"
+          >
+            Sign in
+          </Link>
+        )}
+      </div>
     </main>
   );
 }
