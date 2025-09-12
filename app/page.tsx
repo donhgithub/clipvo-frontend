@@ -15,23 +15,6 @@ export default async function Home() {
       </p>
       <p className="text-muted-foreground">(This proves env works in a Server Component.)</p>
 
-      <div className="pt-4">
-        {isSignedIn ? (
-          <Link
-            href="/projects"
-            className="inline-block px-4 py-2 rounded-xl border hover:bg-muted"
-          >
-            Dashboard
-          </Link>
-        ) : (
-          <Link
-            href="/signin"
-            className="inline-block px-4 py-2 rounded-xl border hover:bg-muted"
-          >
-            Sign in
-          </Link>
-        )}
-      </div>
     </main>
   );
 }
