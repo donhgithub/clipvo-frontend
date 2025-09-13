@@ -21,6 +21,7 @@ const AFTER_SELECT_ROUTE: string = "/projects/workspace";
 
 export default function ProjectsPage() {
   const router = useRouter();
+  const [busyId, setBusyId] = useState<string | null>(null);
 
   const [items, setItems] = useState<Project[]>([]);
   const [name, setName] = useState("");
@@ -71,8 +72,12 @@ export default function ProjectsPage() {
     }
   }
 
-  function selectAndOpenTabs(p: { id: string; name: string }) {
-    // Persist selection for the rest of the app
+function selectAndOpenTabs(p: { id: string; name: string }): void {
+  // 1) Mark this row busy so the button shows "Opening…" and disables
+  setBusyId(p.id);
+
+  try {
+    // 2) Persist selection so the rest of the app can unlock tabs
     try {
       localStorage.setItem("clipvo:selectedProjectId", p.id);
       localStorage.setItem("clipvo:selectedProjectName", p.name);
@@ -80,16 +85,28 @@ export default function ProjectsPage() {
       window.dispatchEvent(
         new CustomEvent("clipvo:project:selected", { detail: { id: p.id, name: p.name } })
       );
-    } catch {}
-    const url = `${AFTER_SELECT_ROUTE}?projectId=${encodeURIComponent(p.id)}&v=${Date.now()}`;
+    } catch {
+      // ignore storage errors (private mode, etc.)
+    }
+
+    // 3) Build destination URL
+    const url =
+      `${AFTER_SELECT_ROUTE}?projectId=${encodeURIComponent(p.id)}&v=${Date.now()}`;
+
+    // 4) Navigate: if staying on /projects, force a refresh so tabs unlock immediately
     if (AFTER_SELECT_ROUTE === "/projects") {
-      // If staying on same route, force refresh so tabs unlock immediately
       router.replace(url);
       router.refresh();
     } else {
       router.push(url);
     }
+    // Note: navigation will unmount this component, so we don't clear busyId here.
+  } catch (err) {
+    // If navigation fails for any reason, re-enable the button
+    console.error("Select & Open Tabs failed:", err);
+    setBusyId(null);
   }
+}
 
   return (
     <div className="p-4 space-y-6">
@@ -141,10 +158,12 @@ export default function ProjectsPage() {
               </div>
               <div className="shrink-0">
                 <button
-                  className="border rounded px-3 py-2 cursor-pointer hover:bg-gray-100 hover:border-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 transition-colors"
+                  className="border rounded px-3 py-2 cursor-pointer hover:bg-gray-100 hover:border-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   onClick={() => selectAndOpenTabs(p)}
+                  disabled={busyId === p.id}
+                  aria-busy={busyId === p.id}
                 >
-                  Select & Open Tabs
+                  {busyId === p.id ? "Opening…" : "Select & Open Tabs"}
                 </button>
               </div>
             </li>
